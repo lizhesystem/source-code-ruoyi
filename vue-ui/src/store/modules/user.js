@@ -37,8 +37,10 @@ const user = {
       const uuid = userInfo.uuid
       return new Promise((resolve, reject) => {
         login(username, password, code, uuid).then(res => {
+          // 登录成功后拿到token,设置token Admin-Token:xxxx。再调用mutations把token设置到store里。
           setToken(res.token)
           commit('SET_TOKEN', res.token)
+          // 走到这算是登录都成功了，login.vue里就可以跳转了，接下来就要去路由拦截器里去处理跳转了~
           resolve()
         }).catch(error => {
           // 这个error就是登录失败后抛出的异常
