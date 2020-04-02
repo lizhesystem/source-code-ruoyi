@@ -6,8 +6,7 @@ import com.ruoyi.common.constant.HttpStatus;
 import com.ruoyi.common.utils.StringUtils;
 
 /**
- * 操作消息提醒
- *
+ * 操作消息提醒（继承hashMap细节，可以使用super.put来封装数据）
  * @author ruoyi
  */
 public class AjaxResult extends HashMap<String, Object> {
@@ -35,7 +34,7 @@ public class AjaxResult extends HashMap<String, Object> {
     }
 
     /**
-     * 初始化一个新创建的 AjaxResult 对象
+     * 初始化一个新创建的 AjaxResult 对象 2参
      *
      * @param code 状态码
      * @param msg  返回内容
@@ -46,11 +45,11 @@ public class AjaxResult extends HashMap<String, Object> {
     }
 
     /**
-     * 初始化一个新创建的 AjaxResult 对象
+     * 初始化一个新创建的 AjaxResult 对象 3参
      *
      * @param code 状态码
      * @param msg  返回内容
-     * @param data 数据对象
+     * @param data 数据对象 判断data不为空返回
      */
     public AjaxResult(int code, String msg, Object data) {
         super.put(CODE_TAG, code);
@@ -61,7 +60,7 @@ public class AjaxResult extends HashMap<String, Object> {
     }
 
     /**
-     * 返回成功消息
+     * 返回成功消息 ---和下面的下面相关连
      *
      * @return 成功消息
      */
@@ -70,7 +69,7 @@ public class AjaxResult extends HashMap<String, Object> {
     }
 
     /**
-     * 返回成功数据
+     * 返回成功消息 + 数据 ---和下面的下面相关联
      *
      * @return 成功消息
      */
@@ -89,7 +88,7 @@ public class AjaxResult extends HashMap<String, Object> {
     }
 
     /**
-     * 返回成功消息
+     * 返回成功消息 + 状态码 + 数据
      *
      * @param msg  返回内容
      * @param data 数据对象

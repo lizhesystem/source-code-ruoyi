@@ -80,6 +80,7 @@
           ],
           code: [{ required: true, trigger: 'change', message: '验证码不能为空' }]
         },
+        // 是否加载中状态
         loading: false,
         redirect: undefined
       }
@@ -87,6 +88,8 @@
     watch: {
       $route: {
         handler: function(route) {
+          // route.query类型:
+          // Object 一个key/value对象，表示URL查询参数。例如对于路径/foo?user=1，则有$route.query.user == 1如果没有查询参数，则是个空对象。
           this.redirect = route.query && route.query.redirect
         },
         immediate: true
@@ -129,10 +132,13 @@
             this.$store
               .dispatch('Login', this.loginForm)
               .then(() => {
+                // 如果登录成功跳转到查询的
                 this.$router.push({ path: this.redirect || '/' })
               })
               .catch(() => {
+                // loading属性的true和false来觉得加载是否完成,如果登录还未结束，按钮显示的是登陆中
                 this.loading = false
+                // 登录失败后重新刷新验证码
                 this.getCode()
               })
           }

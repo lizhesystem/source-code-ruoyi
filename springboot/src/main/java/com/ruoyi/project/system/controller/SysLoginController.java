@@ -23,6 +23,7 @@ import com.ruoyi.project.system.service.ISysMenuService;
  *
  * @author ruoyi
  */
+// 在Spring4里用新注解@RestController可以看做是 @Controller 和@ResponseBody两个注解的组合。
 @RestController
 public class SysLoginController {
     @Autowired
@@ -48,8 +49,9 @@ public class SysLoginController {
      */
     @PostMapping("/login")
     public AjaxResult login(String username, String password, String code, String uuid) {
+        // 封装的返回结果类，成功失败的等等都涵盖在内。
         AjaxResult ajax = AjaxResult.success();
-        // 生成令牌
+        // 生成令牌，跳转到com.ruoyi.framework.security.service.SysLoginService里,专门用来处理登录
         String token = loginService.login(username, password, code, uuid);
         ajax.put(Constants.TOKEN, token);
         return ajax;

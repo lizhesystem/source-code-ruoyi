@@ -41,6 +41,7 @@ const user = {
           commit('SET_TOKEN', res.token)
           resolve()
         }).catch(error => {
+          // 这个error就是登录失败后抛出的异常
           reject(error)
         })
       })
@@ -66,7 +67,7 @@ const user = {
         })
       })
     },
-    
+
     // 退出系统
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {

@@ -62,15 +62,16 @@ public class AsyncFactory {
                 logininfor.setBrowser(browser);
                 logininfor.setOs(os);
                 logininfor.setMsg(message);
-                // 日志状态
+                // 日志状态,根据状态来往logininfor表里setStatus插入数据库 0成功 1失败
                 if (Constants.LOGIN_SUCCESS.equals(status) || Constants.LOGOUT.equals(status)) {
                     logininfor.setStatus(Constants.SUCCESS);
                 } else if (Constants.LOGIN_FAIL.equals(status)) {
                     logininfor.setStatus(Constants.FAIL);
                 }
 
-                // 个人理解：SpringUtils类相当于操作所有bean的一个工具类,通过getBean来获取或者操作bean
-                //          SpringUtils.getBean(ISysLogininforService.class) 获取到操作日志的这个servicer,执行insertLogininfor方法往数据库里插入日志。
+                /** 个人理解：SpringUtils类相当于操作所有bean的一个工具类,通过getBean来获取或者操作bean
+                 *           SpringUtils.getBean(ISysLogininforService.class) 获取到操作日志的这个servicer,执行insertLogininfor方法往数据库里插入日志。
+                 */
                 SpringUtils.getBean(ISysLogininforService.class).insertLogininfor(logininfor);
             }
         };

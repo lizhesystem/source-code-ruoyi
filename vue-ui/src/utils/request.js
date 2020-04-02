@@ -43,6 +43,8 @@ service.interceptors.response.use(res => {
         })
       })
     } else if (code !== 200) {
+      // 在响应拦截器拦截异常请求，如果请求返回结果不是200的话统一展示
+      // Notification是element单独引入的，看上面的import
       Notification.error({
         title: res.data.msg
       })
