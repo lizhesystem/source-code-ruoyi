@@ -55,7 +55,7 @@ public class BaseException extends RuntimeException {
         this(null, null, null, defaultMessage);
     }
 
-//    获取异常提示
+    // 获取异常提示
     @Override
     public String getMessage() {
         String message = null;

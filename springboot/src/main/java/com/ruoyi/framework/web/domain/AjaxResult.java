@@ -7,6 +7,7 @@ import com.ruoyi.common.utils.StringUtils;
 
 /**
  * 操作消息提醒（继承hashMap细节，可以使用super.put来封装数据）
+ *
  * @author ruoyi
  */
 public class AjaxResult extends HashMap<String, Object> {

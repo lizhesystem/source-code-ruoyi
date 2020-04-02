@@ -19,9 +19,10 @@ import com.ruoyi.framework.web.domain.AjaxResult;
 
 /**
  * 全局异常处理器
+ * <p>
+ * 注：如果全部异常处理返回json，那么可以使用@RestControllerAdvice代替@ControllerAdvice，这样在方法上就可以不需要添加@ResponseBody
+ * http://doc.ruoyi.vip/ruoyi/document/htsc.html#异常处理
  *
- *  注：如果全部异常处理返回json，那么可以使用@RestControllerAdvice代替@ControllerAdvice，这样在方法上就可以不需要添加@ResponseBody
- *      http://doc.ruoyi.vip/ruoyi/document/htsc.html#异常处理
  * @author ruoyi
  */
 @RestControllerAdvice

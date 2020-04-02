@@ -2,18 +2,18 @@ package com.ruoyi.framework.security;
 
 import java.util.Collection;
 import java.util.Set;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ruoyi.project.system.domain.SysUser;
 
 /**
- * 登录用户身份权限
- * 
+ * 登录用户身份权限（这个对象在数据库没对应，只是用来登录用的对象）
+ *
  * @author ruoyi
  */
-public class LoginUser implements UserDetails
-{
+public class LoginUser implements UserDetails {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -61,36 +61,38 @@ public class LoginUser implements UserDetails
      */
     private SysUser user;
 
-    public String getToken()
-    {
-        return token;
+
+    public LoginUser() {
     }
 
-    public void setToken(String token)
-    {
-        this.token = token;
-    }
-
-    public LoginUser()
-    {
-    }
-
-    public LoginUser(SysUser user, Set<String> permissions)
-    {
+    public LoginUser(SysUser user, Set<String> permissions) {
         this.user = user;
         this.permissions = permissions;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    /**
+     *
+     //@JsonIgnore此注解用于属性或者方法上（最好是属性上），用来完全忽略被注解的字段和方法对应的属性，即便这个字段或方法可以被自动检测到或者还有其
+     //他的注解，一般标记在属性或者方法上，返回的json数据即不包含该属性 , 主要是为了安全，无法get到密码。
+      @override 是继承父类UserDetails接口的方法
+     * @return
+     */
     @JsonIgnore
     @Override
-    public String getPassword()
-    {
+    public String getPassword() {
         return user.getPassword();
     }
 
     @Override
-    public String getUsername()
-    {
+    public String getUsername() {
         return user.getUserName();
     }
 
@@ -99,130 +101,109 @@ public class LoginUser implements UserDetails
      */
     @JsonIgnore
     @Override
-    public boolean isAccountNonExpired()
-    {
+    public boolean isAccountNonExpired() {
         return true;
     }
 
     /**
      * 指定用户是否解锁,锁定的用户无法进行身份验证
-     * 
+     *
      * @return
      */
     @JsonIgnore
     @Override
-    public boolean isAccountNonLocked()
-    {
+    public boolean isAccountNonLocked() {
         return true;
     }
 
     /**
      * 指示是否已过期的用户的凭据(密码),过期的凭据防止认证
-     * 
+     *
      * @return
      */
     @JsonIgnore
     @Override
-    public boolean isCredentialsNonExpired()
-    {
+    public boolean isCredentialsNonExpired() {
         return true;
     }
 
     /**
      * 是否可用 ,禁用的用户不能身份验证
-     * 
+     *
      * @return
      */
     @JsonIgnore
     @Override
-    public boolean isEnabled()
-    {
+    public boolean isEnabled() {
         return true;
     }
 
-    public Long getLoginTime()
-    {
+    public Long getLoginTime() {
         return loginTime;
     }
 
-    public void setLoginTime(Long loginTime)
-    {
+    public void setLoginTime(Long loginTime) {
         this.loginTime = loginTime;
     }
 
-    public String getIpaddr()
-    {
+    public String getIpaddr() {
         return ipaddr;
     }
 
-    public void setIpaddr(String ipaddr)
-    {
+    public void setIpaddr(String ipaddr) {
         this.ipaddr = ipaddr;
     }
 
-    public String getLoginLocation()
-    {
+    public String getLoginLocation() {
         return loginLocation;
     }
 
-    public void setLoginLocation(String loginLocation)
-    {
+    public void setLoginLocation(String loginLocation) {
         this.loginLocation = loginLocation;
     }
 
-    public String getBrowser()
-    {
+    public String getBrowser() {
         return browser;
     }
 
-    public void setBrowser(String browser)
-    {
+    public void setBrowser(String browser) {
         this.browser = browser;
     }
 
-    public String getOs()
-    {
+    public String getOs() {
         return os;
     }
 
-    public void setOs(String os)
-    {
+    public void setOs(String os) {
         this.os = os;
     }
 
-    public Long getExpireTime()
-    {
+    public Long getExpireTime() {
         return expireTime;
     }
 
-    public void setExpireTime(Long expireTime)
-    {
+    public void setExpireTime(Long expireTime) {
         this.expireTime = expireTime;
     }
 
-    public Set<String> getPermissions()
-    {
+    public Set<String> getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(Set<String> permissions)
-    {
+    public void setPermissions(Set<String> permissions) {
         this.permissions = permissions;
     }
 
-    public SysUser getUser()
-    {
+    public SysUser getUser() {
         return user;
     }
 
-    public void setUser(SysUser user)
-    {
+    public void setUser(SysUser user) {
         this.user = user;
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities()
-    {
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
 }

@@ -9,28 +9,24 @@ import com.ruoyi.framework.config.RuoYiConfig;
 
 /**
  * 获取地址类
- * 
+ *
  * @author ruoyi
  */
-public class AddressUtils
-{
+public class AddressUtils {
+    // 方面输出日志,在日志输出的时候，可以打印出日志信息所属的类。  输出AddressUtils：xxxx
     private static final Logger log = LoggerFactory.getLogger(AddressUtils.class);
 
     public static final String IP_URL = "http://ip.taobao.com/service/getIpInfo.php";
 
-    public static String getRealAddressByIP(String ip)
-    {
+    public static String getRealAddressByIP(String ip) {
         String address = "XX XX";
         // 内网不查询
-        if (IpUtils.internalIp(ip))
-        {
+        if (IpUtils.internalIp(ip)) {
             return "内网IP";
         }
-        if (RuoYiConfig.isAddressEnabled())
-        {
+        if (RuoYiConfig.isAddressEnabled()) {
             String rspStr = HttpUtils.sendPost(IP_URL, "ip=" + ip);
-            if (StringUtils.isEmpty(rspStr))
-            {
+            if (StringUtils.isEmpty(rspStr)) {
                 log.error("获取地理位置异常 {}", ip);
                 return address;
             }

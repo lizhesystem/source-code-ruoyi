@@ -6,8 +6,8 @@ import com.ruoyi.framework.aspectj.lang.annotation.Excel.ColumnType;
 import com.ruoyi.framework.web.domain.BaseEntity;
 
 /**
- * 系统访问记录表 sys_logininfor
- * 
+ * 系统访问记录表 sys_logininfor，记录登录的记录
+ *
  * @author ruoyi
  */
 public class SysLogininfor extends BaseEntity

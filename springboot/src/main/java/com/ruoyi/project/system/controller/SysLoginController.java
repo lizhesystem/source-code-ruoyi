@@ -53,6 +53,7 @@ public class SysLoginController {
         AjaxResult ajax = AjaxResult.success();
         // 生成令牌，跳转到com.ruoyi.framework.security.service.SysLoginService里,专门用来处理登录
         String token = loginService.login(username, password, code, uuid);
+        // 根据jwt规则生成的token返回。
         ajax.put(Constants.TOKEN, token);
         return ajax;
     }
