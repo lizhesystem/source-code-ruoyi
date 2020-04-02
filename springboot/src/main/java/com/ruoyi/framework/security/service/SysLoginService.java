@@ -46,6 +46,7 @@ public class SysLoginService {
      * @return 结果
      */
     public String login(String username, String password, String code, String uuid) {
+        // captcha_codes:25ad1a6b4953492fa18afedc93397857
         String verifyKey = Constants.CAPTCHA_CODE_KEY + uuid;
         // 根据拼接的验证码的name获取验证码 captcha_codes + uuid
         String captcha = redisCache.getCacheObject(verifyKey);
