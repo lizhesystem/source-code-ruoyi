@@ -65,6 +65,7 @@ public class SysLoginController {
      */
     @GetMapping("getInfo")
     public AjaxResult getInfo() {
+        // ServletUtils.getRequest()得到一个HttpServletRequest对象
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         SysUser user = loginUser.getUser();
         // 角色集合

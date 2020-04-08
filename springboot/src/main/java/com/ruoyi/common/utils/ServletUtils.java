@@ -45,7 +45,7 @@ public class ServletUtils {
     }
 
     /**
-     * 获取request
+     * 获取request,调用getRequestAttributes方法返回一个ServletRequestAttributes对象，再调用getRequest方法获取request
      */
     public static HttpServletRequest getRequest() {
         return getRequestAttributes().getRequest();
@@ -54,7 +54,7 @@ public class ServletUtils {
     /**
      * 获取response
      */
-    public static HttpServletResponse getResponse() {
+    public static HttpServletResponse getResponse()  {
         return getRequestAttributes().getResponse();
     }
 
@@ -66,6 +66,8 @@ public class ServletUtils {
     }
 
     public static ServletRequestAttributes getRequestAttributes() {
+        // 正常来说在service层是没有request的,然而直接从controlller传过来的话解决方法太粗暴,
+        // 这里使用了SpringMVC提供的RequestContextHolder
         RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
         return (ServletRequestAttributes) attributes;
     }

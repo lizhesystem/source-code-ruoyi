@@ -40,7 +40,7 @@ const user = {
           // 登录成功后拿到token,设置token Admin-Token:xxxx。再调用mutations把token设置到store里。
           setToken(res.token)
           commit('SET_TOKEN', res.token)
-          // 走到这算是登录都成功了，login.vue里就可以跳转了，接下来就要去路由拦截器里去处理跳转了~
+          // 走到这算是登录都成功了，login.vue里就可以跳转了，接下来就要去路由拦截器里permission.js去处理跳转了~
           resolve()
         }).catch(error => {
           // 这个error就是登录失败后抛出的异常
@@ -52,7 +52,7 @@ const user = {
     // 获取用户信息
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        getInfo(state.token).then(res => {
+        getInfo().then(res => {
           const user = res.user
           const avatar = user.avatar == "" ? require("@/assets/image/profile.jpg") : process.env.VUE_APP_BASE_API + user.avatar;
           if (res.roles && res.roles.length > 0) { // 验证返回的roles是否是一个非空数组

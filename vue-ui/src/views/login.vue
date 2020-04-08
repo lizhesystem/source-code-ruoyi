@@ -64,6 +64,7 @@
       return {
         codeUrl: '',
         cookiePassword: '',
+        // 登录需要的数据
         loginForm: {
           username: 'admin',
           password: 'admin123',
@@ -88,9 +89,10 @@
     watch: {
       $route: {
         handler: function(route) {
-          // route.query类型:
+          // route.query类型: watch路由的参数
           // Object 一个key/value对象，表示URL查询参数。例如对于路径/foo?user=1，则有$route.query.user == 1如果没有查询参数，则是个空对象。
           this.redirect = route.query && route.query.redirect
+          // 默认首次登录this.redirect = /index
         },
         immediate: true
       }
@@ -100,12 +102,14 @@
       this.getCookie()
     },
     methods: {
+      // 获取验证码
       getCode() {
         getCodeImg().then(res => {
           this.codeUrl = 'data:image/gif;base64,' + res.img
           this.loginForm.uuid = res.uuid
         })
       },
+      // 获取本地的cookie
       getCookie() {
         const username = Cookies.get('username')
         const password = Cookies.get('password')
@@ -116,10 +120,12 @@
           rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
         }
       },
+      // 登录
       handleLogin() {
         this.$refs.loginForm.validate(valid => {
           if (valid) {
             this.loading = true
+            // 判断是否记住密码
             if (this.loginForm.rememberMe) {
               Cookies.set('username', this.loginForm.username, { expires: 30 })
               Cookies.set('password', encrypt(this.loginForm.password), { expires: 30 })
@@ -132,7 +138,8 @@
             this.$store
               .dispatch('Login', this.loginForm)
               .then(() => {
-                // 如果登录成功跳转到查询的
+                // 如果登录成功跳转到查询的,到这里说明账户密码是对的，接下来跳转到/路由，进入permission.js路由拦截
+                // 如果是首次登录this.redirect获取到的是/index
                 this.$router.push({ path: this.redirect || '/' })
               })
               .catch(() => {

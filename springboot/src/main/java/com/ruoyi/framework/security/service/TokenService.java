@@ -209,6 +209,8 @@ public class TokenService {
      */
     private String getToken(HttpServletRequest request) {
         String token = request.getHeader(header);
+        // token: Bearer eyJhbGciOiJIUzUxMiJ9.eyJsb2dpbl91c2VyX2tleSI6Ijg5ZDhiOWVmLWQ4MGQtNDY0ZS1hMjJhLTVjNmE2NTczYTUzZiJ9.TpNGJiv8eR-a7i-L5lxelW4oF0D8JQy9UOm7XmRSrPTp2OVl8AX2NVcMlYBg_JXjhAytf8_k0fHmby4AfnuZEg
+        // bearer是生成jwt的时候创建的
         if (StringUtils.isNotEmpty(token) && token.startsWith(Constants.TOKEN_PREFIX)) {
             token = token.replace(Constants.TOKEN_PREFIX, "");
         }
