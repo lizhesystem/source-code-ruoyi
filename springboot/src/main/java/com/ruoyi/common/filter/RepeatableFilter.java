@@ -11,39 +11,31 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * Repeatable 过滤器
- * 
+ *
  * @author ruoyi
  */
-public class RepeatableFilter implements Filter
-{
+public class RepeatableFilter implements Filter {
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException
-    {
+    public void init(FilterConfig filterConfig) throws ServletException {
 
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException
-    {
+            throws IOException, ServletException {
         ServletRequest requestWrapper = null;
-        if (request instanceof HttpServletRequest)
-        {
+        if (request instanceof HttpServletRequest) {
             requestWrapper = new RepeatedlyRequestWrapper((HttpServletRequest) request, response);
         }
-        if (null == requestWrapper)
-        {
+        if (null == requestWrapper) {
             chain.doFilter(request, response);
-        }
-        else
-        {
+        } else {
             chain.doFilter(requestWrapper, response);
         }
     }
 
     @Override
-    public void destroy()
-    {
+    public void destroy() {
 
     }
 }
