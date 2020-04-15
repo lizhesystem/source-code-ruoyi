@@ -24,6 +24,7 @@ public class RepeatableFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         ServletRequest requestWrapper = null;
+        // 只处理请求对象是HttpServletRequest的对象
         if (request instanceof HttpServletRequest) {
             requestWrapper = new RepeatedlyRequestWrapper((HttpServletRequest) request, response);
         }

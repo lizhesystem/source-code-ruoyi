@@ -64,17 +64,18 @@ public class FilterConfig {
     }
 
     /**
-     *  配置第二个过滤器:【RepeatableFilter 】
+     *  配置第二个过滤器:【RepeatableFilter】
      * @return
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Bean
     public FilterRegistrationBean someFilterRegistration() {
-        // 和上面类似，创建对象设置
+        // 和上面类似，创建对象RepeatableFilter,拦截任何请求/* 。
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(new RepeatableFilter());
         registration.addUrlPatterns("/*");
         registration.setName("repeatableFilter");
+        // 优先级取最低。
         registration.setOrder(FilterRegistrationBean.LOWEST_PRECEDENCE);
         return registration;
     }
