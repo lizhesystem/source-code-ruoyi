@@ -1,6 +1,7 @@
 package com.ruoyi.framework.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,9 +20,13 @@ import com.ruoyi.framework.security.handle.LogoutSuccessHandlerImpl;
 /**
  * spring security配置
  *  实现一个配置类继承自WebSecurityConfigurerAdapter，并重写configure(HttpSecurity http)方法
- *  spring sucrity 的自定义用户认证配置的核心均在上述的WebSecurityConfigurerAdapter类的实现类中
+ *  当我们在spring boot引入了spring-security的相关包时，security默认会为我们创建一个默认WebSecurityConfigurerAdapter，
+ *  他拦截所有的http请求(/**),且这个Order的值是：100,我们每声明一个*Adapter类，都会产生一个filterChain。
+ *  https://www.jianshu.com/p/fe1194ca8ecd
  *
- * @author ruoyi
+
+ *
+ * @author 声明了一个filter
  */
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -108,6 +113,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .headers().frameOptions().disable();
+        // 退出访问logout接口
         httpSecurity.logout().logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler);
         // 添加JWT filter
         httpSecurity.addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
@@ -127,10 +133,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * 身份认证接口
+     * 身份认证接口，配置一个内存中的用户认证器，使用
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        // UserDetailsServiceImpl实现了UserDetailsService，用来验证用户名密码。
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
 }

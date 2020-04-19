@@ -45,6 +45,7 @@ public class TokenService {
 
     protected static final long MILLIS_MINUTE = 60 * MILLIS_SECOND;
 
+    // 20分钟
     private static final Long MILLIS_MINUTE_TEN = 20 * 60 * 1000L;
 
     @Autowired
@@ -60,13 +61,14 @@ public class TokenService {
         String token = getToken(request);
         if (StringUtils.isNotEmpty(token)) {
             Claims claims = parseToken(token);
-            // 解析对应的权限以及用户信息
+            // 解析对应的权限以及用户信息，根据token生产jwt的Claims对象，然后根据当时put进去的key值get对于的uuid
             String uuid = (String) claims.get(Constants.LOGIN_USER_KEY);
+            // login_tokens:e751f4e2-b24e-4230-9005-a9a4b8fa08dd  该key值里有当时登录成功创建令牌生成的loginUser对象。
             String userKey = getTokenKey(uuid);
             LoginUser user = redisCache.getCacheObject(userKey);
             return user;
         }
-        return null;
+            return null;
     }
 
     /**
@@ -90,7 +92,7 @@ public class TokenService {
 
     /**
      * 创建令牌（总方法）
-     * 总结：该方法主要功能是封装loginUser对象，返回jwt的token。
+     * 总结：该方法主要功能是再次封装loginUser对象，返回jwt的token。
      *      各个方法都封装成小的方法再去调用，比如获取浏览器信息,获取ip,再根据ip获取地址等。
      *      封装loginUser对象后就把对象放到redis里了，还有就是生成jwt的token
      *
@@ -139,7 +141,7 @@ public class TokenService {
          */
         loginUser.setLoginTime(System.currentTimeMillis());
         loginUser.setExpireTime(loginUser.getLoginTime() + expireTime * MILLIS_MINUTE);
-        // 根据uuid将loginUser缓存,结果是login_tokens + uuid(之前生成的)
+        // 根据uuid将loginUser缓存,结果是login_tokens + uuid(之前生成的)，再次放到redis里
         String userKey = getTokenKey(loginUser.getToken());
         redisCache.setCacheObject(userKey, loginUser, expireTime, TimeUnit.MINUTES);
     }

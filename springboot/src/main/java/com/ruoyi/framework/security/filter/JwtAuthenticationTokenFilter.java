@@ -35,9 +35,14 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
+        // 根据token，获取loginUser对象，在jwt里解密再从redis里拿
         LoginUser loginUser = tokenService.getLoginUser(request);
+        // StringUtils.isNull(SecurityUtils.getAuthentication()) 为空代表当前不是登录，登录没必要走这个filter。
         if (StringUtils.isNotNull(loginUser) && StringUtils.isNull(SecurityUtils.getAuthentication())) {
+            // 验证令牌有效期，相差不足20分钟，自动刷新缓存,设置开始和过期时间重新放到redis里
             tokenService.verifyToken(loginUser);
+            // 将验证信息放入SecurityContextHolder中，UsernamePasswordAuthenticationToken是Security验证账号密码的工具类
+            //
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);

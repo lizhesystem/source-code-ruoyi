@@ -53,13 +53,15 @@ public class SysLoginController {
         AjaxResult ajax = AjaxResult.success();
         // 生成令牌，跳转到com.ruoyi.framework.security.service.SysLoginService里,专门用来处理登录
         String token = loginService.login(username, password, code, uuid);
-        // 根据jwt规则生成的token返回。
+        // token返回,登录的接口完成，登录成功后接下来前端跳转路由会拉取用户信息。走下面的getInfo
         ajax.put(Constants.TOKEN, token);
         return ajax;
     }
 
     /**
      * 获取用户信息
+     *  获取信息之前会先走2个filter,一个是读取inputStream的request的，一个是security的JwtAuthenticationTokenFilter。
+     *  后者主要是用来判断token的，如果登录成功后有token，带着这个token请求该接口的时候走这个filter进行验证。
      *
      * @return 用户信息
      */

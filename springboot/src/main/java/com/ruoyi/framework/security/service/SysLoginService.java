@@ -81,15 +81,22 @@ public class SysLoginService {
         try {
             /**
              *  username和password被获得后封装到一个UsernamePasswordAuthenticationToken（Authentication接口的实例）的实例中
-             *  这个token使用AuthenticationManager进行验证,成功认证后AuthenticationManager将返回一个得到完整填充的Authentication实例
+             *  AuthenticationManager 为认证管理接口类，其定义了认证方法 authenticate(),里面的usernamePasswordAuthenticationToken去调用自己实现的
+             *  UserDetailsService的UserDetailsServiceImpl类，对UserDetail的信息进行校验，主要是帐号是否被冻结，是否过期等，自定义的实现返回loginUser对象，里面还有Permission权限标识
+             *  还有在SecurityConfig配置类里有对密码进行检查，调用了PasswordEncoder实现加密解密
+             *
+             * 最后返回经过认证的Authentication对象，Principal里面包含了LoginUser对象(里面包含查到的user对象和权限)，该对象需要继承UserDetails！
+
              */
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, password);
             authentication = authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(username, password));
+                        .authenticate(usernamePasswordAuthenticationToken);
         } catch (Exception e) {
             // 认证失败后记录日志,返回结果。
             if (e instanceof BadCredentialsException) {
                 /**
-                 *  认证失败后,security会抛出BadCredentialsException异常，该异常就是确认用户名或者密码错误的，判断如果是该对象对象返回字典的【用户不存在/密码错误】
+                 *  认证失败后,security会抛出BadCredentialsException异常，该异常就是确认用户名或者密码错误的，
+                 *  判断如果是该对象对象返回字典的【用户不存在/密码错误】
                  *  打印日志 + 抛出返回的异常
                  */
                 AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_FAIL, MessageUtils.message("user.password.not.match")));
@@ -105,11 +112,12 @@ public class SysLoginService {
         /**
          * 登录成功后打印成功日志
          * 通过 Authentication.getPrincipal() 可以获取到代表当前用户的信息，这个对象通常是 UserDetails的实例。我们的LoginUser对象继承了这个对象。
-         * 通过 UserDetails接口的实现，我们可以获取到当前用户的用户名、密码、角色等信息。具体看loginUser里的注释。
+         * 通过 UserDetailsService接口的实现，我们可以通过authentication.getPrincipal()获取UserDetails，再强转loginUser获取里面的user对象和权限，
          */
         AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
+        // 得到user对象以及权限属性
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
-        // 认证成功生成token,并且把封装的loginUser对象放到redis
+        // 认证成功返回jwt生成token并且返回(String),并且把封装的loginUser对象放到redis
         return tokenService.createToken(loginUser);
     }
 }

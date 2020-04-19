@@ -45,7 +45,6 @@ public class LoginUser implements UserDetails {
      * 浏览器类型
      */
     private String browser;
-
     /**
      * 操作系统
      */
@@ -79,11 +78,11 @@ public class LoginUser implements UserDetails {
     }
 
     /**
+     * //@JsonIgnore此注解用于属性或者方法上（最好是属性上），用来完全忽略被注解的字段和方法对应的属性，即便这个字段或方法可以被自动检测到或者还有其
+     * //他的注解，一般标记在属性或者方法上，返回的json数据即不包含该属性 , 主要是为了安全，无法get到密码。
      *
-     //@JsonIgnore此注解用于属性或者方法上（最好是属性上），用来完全忽略被注解的字段和方法对应的属性，即便这个字段或方法可以被自动检测到或者还有其
-     //他的注解，一般标记在属性或者方法上，返回的json数据即不包含该属性 , 主要是为了安全，无法get到密码。
-      @override 是继承父类UserDetails接口的方法
      * @return
+     * @override 是继承父类UserDetails接口的方法
      */
     @JsonIgnore
     @Override

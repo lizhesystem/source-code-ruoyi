@@ -31,6 +31,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        // 根据传入的username获取数据库user对象
         SysUser user = userService.selectUserByUserName(username);
         if (StringUtils.isNull(user)) {
             log.info("登录用户：{} 不存在.", username);
@@ -42,7 +43,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             log.info("登录用户：{} 已被停用.", username);
             throw new BaseException("对不起，您的账号：" + username + " 已停用");
         }
-
+        // 如果登录的username能查到，但是未停用或者未删除的话，创建新用户，封装LoginUser对象里的user和permission,
         return createLoginUser(user);
     }
 
