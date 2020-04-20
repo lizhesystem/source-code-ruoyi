@@ -109,6 +109,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
      * @param roleId 角色ID
      * @return 选中菜单列表
      */
+    @Override
     public List<Integer> selectMenuListByRoleId(Long roleId) {
         return menuMapper.selectMenuListByRoleId(roleId);
     }
@@ -282,8 +283,15 @@ public class SysMenuServiceImpl implements ISysMenuService {
      */
     public List<SysMenu> getChildPerms(List<SysMenu> list, int parentId) {
         List<SysMenu> returnList = new ArrayList<SysMenu>();
-        for (Iterator<SysMenu> iterator = list.iterator(); iterator.hasNext(); ) {
-            SysMenu t = (SysMenu) iterator.next();
+        //for (Iterator<SysMenu> iterator = list.iterator(); iterator.hasNext(); ) {
+        //    SysMenu t = (SysMenu) iterator.next();
+        //    // 一、根据传入的某个父节点ID,遍历该父节点的所有子节点
+        //    if (t.getParentId() == parentId) {
+        //        recursionFn(list, t);
+        //        returnList.add(t);
+        //    }
+        //}
+        for (SysMenu t : list) {
             // 一、根据传入的某个父节点ID,遍历该父节点的所有子节点
             if (t.getParentId() == parentId) {
                 recursionFn(list, t);
@@ -306,9 +314,11 @@ public class SysMenuServiceImpl implements ISysMenuService {
         for (SysMenu tChild : childList) {
             if (hasChild(list, tChild)) {
                 // 判断是否有子节点
-                Iterator<SysMenu> it = childList.iterator();
-                while (it.hasNext()) {
-                    SysMenu n = (SysMenu) it.next();
+                //while (it.hasNext()) {
+                //    SysMenu n = (SysMenu) it.next();
+                //    recursionFn(list, n);
+                //}
+                for (SysMenu n : childList) {
                     recursionFn(list, n);
                 }
             }
@@ -320,9 +330,13 @@ public class SysMenuServiceImpl implements ISysMenuService {
      */
     private List<SysMenu> getChildList(List<SysMenu> list, SysMenu t) {
         List<SysMenu> tlist = new ArrayList<SysMenu>();
-        Iterator<SysMenu> it = list.iterator();
-        while (it.hasNext()) {
-            SysMenu n = (SysMenu) it.next();
+        //while (it.hasNext()) {
+        //    SysMenu n = (SysMenu) it.next();
+        //    if (n.getParentId().longValue() == t.getMenuId().longValue()) {
+        //        tlist.add(n);
+        //    }
+        //}
+        for (SysMenu n : list) {
             if (n.getParentId().longValue() == t.getMenuId().longValue()) {
                 tlist.add(n);
             }
@@ -333,7 +347,10 @@ public class SysMenuServiceImpl implements ISysMenuService {
     /**
      * 判断是否有子节点
      */
+    //private boolean hasChild(List<SysMenu> list, SysMenu t) {
+    //    return getChildList(list, t).size() > 0 ? true : false;
+    //}
     private boolean hasChild(List<SysMenu> list, SysMenu t) {
-        return getChildList(list, t).size() > 0 ? true : false;
+        return getChildList(list, t).size() > 0;
     }
 }

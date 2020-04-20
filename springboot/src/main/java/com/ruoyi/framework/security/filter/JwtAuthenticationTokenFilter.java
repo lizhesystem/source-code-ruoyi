@@ -20,7 +20,7 @@ import com.ruoyi.framework.security.service.TokenService;
 /**
  * token过滤器 验证token有效性
  * 如果想让一个Filter在一次请求处理的过程中只被应用一次，就让这个Filter继承自OncePerRequestFilter。
- *
+ * <p>
  * （比如某个JSP页面中使用 include包含了另外一个JSP片段(比如页面统一的头部或者底部区域),在这样的JSP页面被请求时，因为这些include指令，该页面请求的的处理中，
  * 同一个Filter也会被应用多次，也就是它的 doFilter()方法会被调用多次。）
  *
@@ -42,7 +42,6 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             // 验证令牌有效期，相差不足20分钟，自动刷新缓存,设置开始和过期时间重新放到redis里
             tokenService.verifyToken(loginUser);
             // 将验证信息放入SecurityContextHolder中，UsernamePasswordAuthenticationToken是Security验证账号密码的工具类
-            //
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
