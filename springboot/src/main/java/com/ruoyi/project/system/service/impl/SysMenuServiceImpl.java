@@ -76,10 +76,12 @@ public class SysMenuServiceImpl implements ISysMenuService {
      */
     @Override
     public Set<String> selectMenuPermsByUserId(Long userId) {
+        // 先根据userID 获取该用户所属角色所有的权限标识  system:user:list....
         List<String> perms = menuMapper.selectMenuPermsByUserId(userId);
         Set<String> permsSet = new HashSet<>();
         for (String perm : perms) {
             if (StringUtils.isNotEmpty(perm)) {
+                // 如果角色权限字符串多个的话,数组转集合，add到定义的Set集合里
                 permsSet.addAll(Arrays.asList(perm.trim().split(",")));
             }
         }
@@ -95,11 +97,15 @@ public class SysMenuServiceImpl implements ISysMenuService {
     @Override
     public List<SysMenu> selectMenuTreeByUserId(Long userId) {
         List<SysMenu> menus = null;
+        // 管理员userId为1
         if (SecurityUtils.isAdmin(userId)) {
+            // 直接查menu表所有数据返回SysMenu对象
             menus = menuMapper.selectMenuTreeAll();
         } else {
+            // 根据userId查所属角色的menu
             menus = menuMapper.selectMenuTreeByUserId(userId);
         }
+        // 接下来就是递归生成tree了。
         return getChildPerms(menus, 0);
     }
 
@@ -282,8 +288,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
      */
     public List<SysMenu> getChildPerms(List<SysMenu> list, int parentId) {
         List<SysMenu> returnList = new ArrayList<SysMenu>();
-        for (Iterator<SysMenu> iterator = list.iterator(); iterator.hasNext(); ) {
-            SysMenu t = (SysMenu) iterator.next();
+        for (SysMenu t : list) {
             // 一、根据传入的某个父节点ID,遍历该父节点的所有子节点
             if (t.getParentId() == parentId) {
                 recursionFn(list, t);
@@ -306,9 +311,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
         for (SysMenu tChild : childList) {
             if (hasChild(list, tChild)) {
                 // 判断是否有子节点
-                Iterator<SysMenu> it = childList.iterator();
-                while (it.hasNext()) {
-                    SysMenu n = (SysMenu) it.next();
+                for (SysMenu n : childList) {
                     recursionFn(list, n);
                 }
             }
@@ -320,9 +323,7 @@ public class SysMenuServiceImpl implements ISysMenuService {
      */
     private List<SysMenu> getChildList(List<SysMenu> list, SysMenu t) {
         List<SysMenu> tlist = new ArrayList<SysMenu>();
-        Iterator<SysMenu> it = list.iterator();
-        while (it.hasNext()) {
-            SysMenu n = (SysMenu) it.next();
+        for (SysMenu n : list) {
             if (n.getParentId().longValue() == t.getMenuId().longValue()) {
                 tlist.add(n);
             }
