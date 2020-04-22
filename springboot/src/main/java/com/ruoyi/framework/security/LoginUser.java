@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ruoyi.project.system.domain.SysUser;
 
 /**
- * 登录用户身份权限（这个对象在数据库没对应，只是用来登录用的对象）
+ * 登录用户身份权限（这个对象在数据库没对应，只是用来登录用的对象,需要继承UserDetails）
  *
  * @author ruoyi
  */

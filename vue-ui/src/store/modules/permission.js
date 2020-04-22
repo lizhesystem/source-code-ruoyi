@@ -20,6 +20,7 @@ const permission = {
         // 向后端请求路由数据
         getRouters().then(res => {
           const accessedRoutes = filterAsyncRouter(res.data)
+          // 路由处理,放到store里
           accessedRoutes.push({ path: '*', redirect: '/404', hidden: true })
           commit('SET_ROUTES', accessedRoutes)
           resolve(accessedRoutes)
@@ -33,13 +34,14 @@ const permission = {
 function filterAsyncRouter(asyncRouterMap) {
   return asyncRouterMap.filter(route => {
     if (route.component) {
-      // Layout组件特殊处理
+      // Layout组件特殊处理，如果是第一次菜单的话,赋值Layout路由
       if (route.component === 'Layout') {
         route.component = Layout
       } else {
         route.component = loadView(route.component)
       }
     }
+    // 如果路由下有children继续递归循环
     if (route.children != null && route.children && route.children.length) {
       route.children = filterAsyncRouter(route.children)
     }

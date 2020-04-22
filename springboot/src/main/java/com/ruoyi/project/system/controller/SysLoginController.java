@@ -3,6 +3,7 @@ package com.ruoyi.project.system.controller;
 import java.util.List;
 import java.util.Set;
 
+import com.ruoyi.project.system.domain.vo.RouterVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -97,7 +98,9 @@ public class SysLoginController {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         // 用户信息
         SysUser user = loginUser.getUser();
+        // 根据用户所属的角色获取菜单,然后再生产前端需要的格式的路由，RouterVo路由对象
         List<SysMenu> menus = menuService.selectMenuTreeByUserId(user.getUserId());
-        return AjaxResult.success(menuService.buildMenus(menus));
+        List<RouterVo> routerVos = menuService.buildMenus(menus);
+        return AjaxResult.success(routerVos);
     }
 }

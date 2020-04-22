@@ -41,6 +41,8 @@ router.beforeEach((to, from, next) => {
           // store.dispatch('permission/generateRoutes', { roles }).then(accessRoutes => {
             // 根据roles权限生成可访问的路由表
             router.addRoutes(accessRoutes) // 动态添加可访问路由表
+            // 我的理解是这样：直接next()会resolve当前的钩子，导航直接放行，进入to的地址，但是在next中添加一个地址，会中断当前的导航，并创建一个新的导航，
+            // 新的导航在开始时会确认routes，从而保证了addroutes完成并生效，，，replace只是保证了去掉历史，在浏览器上按后退键失效，去掉应该也行，可能是为了防止后退刷新的，
             next({ ...to, replace: true }) // hack方法 确保addRoutes已完成
           })
         })
