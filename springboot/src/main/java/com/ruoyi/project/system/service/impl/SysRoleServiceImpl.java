@@ -61,10 +61,22 @@ public class SysRoleServiceImpl implements ISysRoleService {
      */
     @Override
     public Set<String> selectRolePermissionByUserId(Long userId) {
+        /**
+         * 根据userId获取该用户所属角色,角色和用户关联，再跟部门表关联，得到当前用户的所属角色。
+         * 	    select distinct r.role_id, r.role_name, r.role_key, r.role_sort, r.data_scope,
+         *             r.status, r.del_flag, r.create_time, r.remark
+         *         from sys_role r
+         * 	        left join sys_user_role ur on ur.role_id = r.role_id
+         * 	        left join sys_user u on u.user_id = ur.user_id
+         * 	        left join sys_dept d on u.dept_id = d.dept_id
+          */
         List<SysRole> perms = roleMapper.selectRolePermissionByUserId(userId);
+        // HashSet实现了Set接口，它不允许集合中出现重复元素,仅存储对象
         Set<String> permsSet = new HashSet<>();
         for (SysRole perm : perms) {
             if (StringUtils.isNotNull(perm)) {
+                // 如果角色权限字符串多个的话,数组转集合，add到定义的Set集合里
+                // Arrays,asList（将一个数组转换为 List）
                 permsSet.addAll(Arrays.asList(perm.getRoleKey().trim().split(",")));
             }
         }

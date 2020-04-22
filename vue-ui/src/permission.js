@@ -33,8 +33,9 @@ router.beforeEach((to, from, next) => {
       if (store.getters.roles.length === 0) {
         // 判断当前用户是否已拉取完user_info信息
         store.dispatch('GetInfo').then(res => {
-          // 拉取user_info
+          // 拉取user_info,包含user对象，角色roles，权限permissions
           const roles = res.roles
+          // 根据角色生成路由,传入roles对象
           store.dispatch('GenerateRoutes', { roles }).then(accessRoutes => {
           // 测试 默认静态页面
           // store.dispatch('permission/generateRoutes', { roles }).then(accessRoutes => {
