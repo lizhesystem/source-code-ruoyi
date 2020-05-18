@@ -87,6 +87,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // CRSF禁用，因为不使用session
                 .csrf().disable()
                 // 认证失败处理类
+                // (AuthenticationEntryPoint 用来解决匿名用户访问无权限资源时的异常)扩展(AccessDeineHandler 用来解决认证过的用户访问无权限资源时的异常)
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 // 基于token，所以不需要session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
